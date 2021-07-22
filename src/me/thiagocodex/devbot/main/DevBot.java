@@ -60,7 +60,7 @@ public class DevBot {
 
 
     public static void setActivity(JDA jda) throws InterruptedException {
-        jda.getPresence().setPresence(OnlineStatus.ONLINE, Activity.playing("em " + jda.awaitReady().getGuilds().size() + " servidores"));
+        jda.getPresence().setPresence(OnlineStatus.DO_NOT_DISTURB, Activity.playing("em " + jda.awaitReady().getGuilds().size() + " servidores"));
 
     }
 
