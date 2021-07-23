@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
 
@@ -15,7 +16,6 @@ public class EmbedMessage {
     public EmbedBuilder getInstance() {
         return instance == null ? new EmbedBuilder() : instance.clear();
     }
-
 
     public MessageEmbed noPerm(Member member) {
         return getInstance()
@@ -34,10 +34,10 @@ public class EmbedMessage {
     }
 
 
-    public MessageEmbed defaultRoleSuccess(String s) {
+    public MessageEmbed defaultRoleSuccess(String roleName) {
         return getInstance()
                 .setColor(new Color(0x00FF00))
-                .setDescription(s)
+                .setDescription("Definido cargo padrão para novos membros como: " + roleName)
                 .build();
     }
 
@@ -57,10 +57,13 @@ public class EmbedMessage {
     }
 
 
-    public void sendPrivateCannotSendMessage(Member bot) {
 
-        bot.getGuild().getMemberById("852974444954910730").getUser().openPrivateChannel().queue(privateChannel -> privateChannel.sendMessage("Não consigo enviar mensagens no servidor " + bot.getGuild().getName() + " preciso da permissão: " + Permission.MESSAGE_WRITE.getName()).queue());
+    public void sendPrivateCannotSendMessage(User admin, Member bot) {
 
+        admin.openPrivateChannel().queue(privateChannel ->
+                privateChannel.sendMessage(getInstance().setColor(new Color(0xFF0000))
+                        .setDescription("Não consigo enviar mensagens no servidor " + bot.getGuild().getName() + " preciso da permissão: " + Permission.MESSAGE_WRITE.getName())
+                        .build()).queue());
 
     }
 
