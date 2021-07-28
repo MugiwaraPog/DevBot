@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
+import java.util.concurrent.TimeUnit;
 
 
 public class EmbedMessage {
@@ -63,7 +64,7 @@ public class EmbedMessage {
         admin.openPrivateChannel().queue(privateChannel ->
                 privateChannel.sendMessage(getInstance().setColor(new Color(0xFF0000))
                         .setDescription("Não consigo enviar mensagens no servidor " + bot.getGuild().getName() + " preciso da permissão: " + Permission.MESSAGE_WRITE.getName())
-                        .build()).queue());
+                        .build()).queue(message -> message.delete().queueAfter(1, TimeUnit.MINUTES)));
 
     }
 

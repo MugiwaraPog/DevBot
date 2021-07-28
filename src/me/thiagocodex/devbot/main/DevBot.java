@@ -1,13 +1,11 @@
 package me.thiagocodex.devbot.main;
 
-import me.thiagocodex.devbot.commands.Prefix;
-import me.thiagocodex.devbot.commands.Roles;
+import me.thiagocodex.devbot.commands.*;
 import me.thiagocodex.devbot.database.CRUD;
 import me.thiagocodex.devbot.database.Config;
 import me.thiagocodex.devbot.events.GuildJoin;
 import me.thiagocodex.devbot.events.GuildLeave;
 import me.thiagocodex.devbot.events.MemberJoin;
-import me.thiagocodex.devbot.commands.Ping;
 import me.thiagocodex.devbot.events.MemberLeave;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -45,7 +43,9 @@ public class DevBot {
                 new Prefix(),
                 new Roles(),
                 new GuildJoin(),
-                new GuildLeave());
+                new GuildLeave(),
+                new BulkDelete(),
+                new PrivateBulkDelete());
 
         for (Guild guild : jda.awaitReady().getGuilds()) {
             CRUD.insert(guild.getId(), '$');
