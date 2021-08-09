@@ -58,6 +58,25 @@ public class EmbedMessage {
     }
 
 
+    public MessageEmbed success(String message) {
+        return getInstance().setColor(new Color(0x00FF00))
+                .setDescription(message)
+                .build();
+    }
+
+    public MessageEmbed info(String message) {
+        return getInstance().setColor(new Color(0xFFFF00))
+                .setDescription(message)
+                .build();
+    }
+
+
+    public MessageEmbed error(String message) {
+        return getInstance().setColor(new Color(0xFF0000))
+                .setDescription(message)
+                .build();
+    }
+
 
     public void sendPrivateCannotSendMessage(User admin, Member bot) {
 
