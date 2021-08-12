@@ -7,11 +7,12 @@ import me.thiagocodex.devbot.events.GuildJoin;
 import me.thiagocodex.devbot.events.GuildLeave;
 import me.thiagocodex.devbot.events.MemberJoin;
 import me.thiagocodex.devbot.events.MemberLeave;
+import me.thiagocodex.devbot.messages.EmbedMessage;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
-import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 
@@ -28,6 +29,7 @@ public class DevBot {
 
     public static Map<String, Character> prefixMap = new HashMap<>();
     public static Map<String, String> autoroleMap = new HashMap<>();
+    public static final EmbedMessage embedMessage = new EmbedMessage();
 
     public static void main(String[] args) throws LoginException, InterruptedException, SQLException, IOException {
 
@@ -62,6 +64,15 @@ public class DevBot {
     public static void setActivity(JDA jda) throws InterruptedException {
         jda.getPresence().setPresence(OnlineStatus.DO_NOT_DISTURB, Activity.playing("em " + jda.awaitReady().getGuilds().size() + " servidores"));
 
+    }
+
+    public static void sendIfPermitted(User admin, TextChannel textChannel, MessageEmbed messageEmbed) {
+
+        if (textChannel.getGuild().getSelfMember().hasPermission(textChannel, Permission.MESSAGE_WRITE)) {
+            textChannel.sendMessage(messageEmbed).queue();
+        } else {
+            embedMessage.sendPrivateCannotSendMessage(admin, textChannel.getGuild().getSelfMember());
+        }
     }
 
 }

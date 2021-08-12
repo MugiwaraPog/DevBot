@@ -19,17 +19,6 @@ public class Roles extends ListenerAdapter {
     private final Map<String, Map<Byte, String>> guildRolesMapMap = new HashMap<>();
     private final Map<String, Boolean> isEditingAutoroleMap = new HashMap<>();
     private final Map<String, Member> memberEditingAutoroleMap = new HashMap<>();
-    private final EmbedMessage embedMessage = new EmbedMessage();
-
-
-    public void sendIfPermitted(User admin, TextChannel textChannel, MessageEmbed messageEmbed) {
-
-        if (textChannel.getGuild().getSelfMember().hasPermission(textChannel, Permission.MESSAGE_WRITE)) {
-            textChannel.sendMessage(messageEmbed).queue();
-        } else {
-            embedMessage.sendPrivateCannotSendMessage(admin, textChannel.getGuild().getSelfMember());
-        }
-    }
 
     @Override
     public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
@@ -42,7 +31,7 @@ public class Roles extends ListenerAdapter {
 
 
             if (!event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
-                sendIfPermitted(event.getMember().getUser(), event.getChannel(), embedMessage.noPerm(event.getMember()));
+              DevBot.sendIfPermitted(event.getMember().getUser(), event.getChannel(), DevBot.embedMessage.noPerm(event.getMember()));
                 return;
             }
 
@@ -65,7 +54,7 @@ public class Roles extends ListenerAdapter {
             }
 
             if (stringBuilder.length() == 0) {
-                sendIfPermitted(event.getMember().getUser(), event.getChannel(), embedMessage.noLowerRoles());
+                DevBot.sendIfPermitted(event.getMember().getUser(), event.getChannel(), DevBot.embedMessage.noLowerRoles());
                 return;
             }
 
@@ -74,7 +63,7 @@ public class Roles extends ListenerAdapter {
             isEditingAutoroleMap.put(gId, true);
             memberEditingAutoroleMap.put(gId, event.getMember());
 
-            sendIfPermitted(event.getMember().getUser(), event.getChannel(), embedMessage.listRolesIndexes(stringBuilder));
+            DevBot.sendIfPermitted(event.getMember().getUser(), event.getChannel(), DevBot.embedMessage.listRolesIndexes(stringBuilder));
 
         } else if (args[0].matches("^[0-9]{1,3}$")) {
 
@@ -87,12 +76,12 @@ public class Roles extends ListenerAdapter {
 
 
             if (Byte.parseByte(args[0]) >= guildRolesMapMap.get(gId).size()) {
-                sendIfPermitted(event.getMember().getUser(), event.getChannel(), embedMessage.invalidIndex());
+                DevBot.sendIfPermitted(event.getMember().getUser(), event.getChannel(), DevBot.embedMessage.invalidIndex());
                 return;
             }
 
-            sendIfPermitted(event.getMember().getUser(), event.getChannel(),
-                    embedMessage.defaultRoleSuccess(event.getGuild().getRoleById(guildRolesMapMap.get(gId).get(Byte.parseByte(args[0]))).getName()));
+            DevBot.sendIfPermitted(event.getMember().getUser(), event.getChannel(),
+                    DevBot.embedMessage.defaultRoleSuccess(event.getGuild().getRoleById(guildRolesMapMap.get(gId).get(Byte.parseByte(args[0]))).getName()));
 
             try {
                 CRUD.update("autorole", gId, guildRolesMapMap.get(gId).get(Byte.parseByte(args[0])));
